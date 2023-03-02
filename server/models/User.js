@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
         profilePicture:{type:String},
         followers:{type:Array, defaultValue:[]},
         following:{type:Array, defaultValue:[]},
-        description:{type:String}
+        description:{type:String},
     
 },{timestamp:true});
 
