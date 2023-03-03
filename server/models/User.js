@@ -17,6 +17,6 @@ const UserSchema = new mongoose.Schema({
         following:{type:Array, defaultValue:[]},
         description:{type:String},
     
-},{timestamp:true});
+},{timestamps:true});
 
 export default mongoose.model("User",UserSchema);

@@ -42,3 +42,67 @@ export const deleteUser= async(req,res,next)=>{
         return next(handleError(403,"You can only update your own account"));
     }
 }
+
+export const follow= async(req,res,next)=>{
+    
+        try{
+            //user
+            const user= await User.findById(req.params.id);
+            //current user
+            const currentUser= await User.findById(req.body.id);
+
+            if(!user.followers.includes(req.body.id)){
+                await user.updateOne({
+                    $push: {
+                        followers: req.body.id,
+                    },
+                });
+
+                await currentUser.updateOne({
+                    $push: {
+                        following: req.params.id,
+                    },
+                });
+            }
+            else{
+                res.status(403).json("You already follow this account");
+            }
+                res.status(200).json("Following the user");
+        }catch(err){next(err);}
+        
+   
+}
+
+
+
+
+
+export const unfollow= async(req,res,next)=>{
+    
+    try{
+        //user
+        const user= await User.findById(req.params.id);
+        //current user
+        const currentUser= await User.findById(req.body.id);
+
+        if(currentUser.following.includes(req.params.id)){
+            await user.updateOne({
+                $pull: {
+                    followers: req.body.id,
+                },
+            });
+
+            await currentUser.updateOne({
+                $pull: { 
+                    following: req.params.id,
+                },
+            });
+        }
+        else{
+            res.status(403).json("You are not following this account");
+        }
+            res.status(200).json("Unfollowing the user");
+    }catch(err){next(err);}
+    
+
+}
