@@ -24,3 +24,20 @@ export const deleteTweet =async (req,res,next)=>{
         handleError(500,err);
     }
 }
+
+
+
+export const likeOrDislike =async (req,res,next)=>{
+    try{
+       const tweet = await Tweet.findById(req.params.id);
+       if(!tweet.likes.includes(req.body.id)){
+        await tweet.updateOne({$push:{likes:req.body.id}})
+        res.status(200).json("Tweet has been liked");
+       }else{
+        await tweet.updateOne({$push:{likes:req.body.id}});
+        res.status(200).json("Tweet has been disliked");
+       }
+    }catch(err){
+        handleError(500,err);
+    }
+}
